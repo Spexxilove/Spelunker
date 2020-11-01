@@ -36,15 +36,6 @@ public class LevelGenerator : MonoBehaviour
 
     private void PlanLevelLayout()
     {
-        for (int x = 0; x < this.config.xDimension; x++)
-        {
-            for (int y = 0; y < this.config.yDimension; y++)
-            {
-                // for testing
-                this.levelPlan[x, y].roomPrefab = this.defaultRoomPrefab;
-            }
-        }
-
 
         // get choose starting point
         int startRoomX = rng.Next(0, this.config.xDimension);
@@ -118,6 +109,19 @@ public class LevelGenerator : MonoBehaviour
 
     private void SpawnRooms()
     {
+        //TODO: fix this mess
+        for (int x = 0; x < this.config.xDimension; x++)
+        {
+            for (int y = 0; y < this.config.yDimension; y++)
+            {
+                if (this.levelPlan[x, y].roomPrefab == null)
+                {
+                    this.levelPlan[x, y].roomPrefab = this.config.GeneralRoomPool.GetRandomRoomWithOpenings(this.levelPlan[x, y], rng);
+                }
+            }
+        }
+
+
         for (int x = 0; x < this.config.xDimension; x++)
         {
             for (int y = 0; y < this.config.yDimension; y++)

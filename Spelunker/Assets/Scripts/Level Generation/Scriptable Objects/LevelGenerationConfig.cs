@@ -14,17 +14,7 @@ public class LevelGenerationConfig : ScriptableObject
     // size of level in y direction (vertical)
     public int yDimension = 5;
 
-    // room pools named by opening in direction
-    public RoomPool leftRoomPool;
-    public RoomPool leftBottomRoomPool;
-    public RoomPool leftRightRoomPool;
-    public RoomPool leftRightBottomRoomPool;
-    public RoomPool leftTopRoomPool;
-    public RoomPool leftTopRightRoomPool;
-    public RoomPool rightRoomPool;
-    public RoomPool rightBottomRoomPool;
-    public RoomPool topRoomPool;
-    public RoomPool topRightRoomPool;
+    public RoomPool GeneralRoomPool;
 
     // start room prefab on top floor
     public GameObject startRoom;
