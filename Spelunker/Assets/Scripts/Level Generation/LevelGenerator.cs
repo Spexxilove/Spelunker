@@ -15,6 +15,7 @@ public class LevelGenerator : MonoBehaviour
 
     // just for testing
     public GameObject defaultRoomPrefab;
+    public GameObject plannedRoomPrefab;
 
     // using system random to have a seperate instance for safety
     private System.Random rng;
@@ -65,40 +66,51 @@ public class LevelGenerator : MonoBehaviour
         // plan floors above bottom floor
         for (int y = this.config.yDimension - 1; y > 0; y--)
         {
-            //floor starting point has to be open at top and closed at bottom
-            levelPlan[previousFloorDescentionX, y].topState = OpeningState.OPEN;
-            levelPlan[previousFloorDescentionX, y].bottomState = OpeningState.CLOSED;
-
             // current floor end generation
             int floorDescentionX = GenerateFloorDescention(previousFloorDescentionX);
 
-            //floor end point has to be closed at top and open at bottom
-            levelPlan[floorDescentionX, y].topState = OpeningState.CLOSED;
-            levelPlan[floorDescentionX, y].bottomState = OpeningState.OPEN;
+            GenerateFloor(previousFloorDescentionX, y, floorDescentionX);
 
-            int leftX = Math.Min(floorDescentionX, previousFloorDescentionX);
-            int rightX = Math.Max(floorDescentionX, previousFloorDescentionX);
-
-            // start and end horizontal openings
-            levelPlan[leftX, y].rightState = OpeningState.OPEN;
-            levelPlan[rightX, y].leftState = OpeningState.OPEN;
-
-            // in between openings
-            for (int x = leftX+1; x < rightX; x++)
-            {
-                levelPlan[x, y].rightState = OpeningState.OPEN;
-                levelPlan[x, y].leftState = OpeningState.OPEN;
-            }
-            
             previousFloorDescentionX = floorDescentionX;
         }
+
+        //plan bottom floor
+        GenerateFloor(previousFloorDescentionX, 0, goalRoomX);
     }
 
-    
+    //connects floor plan between previousFloorDescentionX and floorDescentionX on floor y
+    private void GenerateFloor(int previousFloorDescentionX, int y, int floorDescentionX)
+    {
+        //floor starting point has to be open at top and closed at bottom
+        levelPlan[previousFloorDescentionX, y].topState = OpeningState.OPEN;
+        levelPlan[previousFloorDescentionX, y].bottomState = OpeningState.CLOSED;
+
+        //floor end point has to be closed at top and open at bottom
+        levelPlan[floorDescentionX, y].topState = OpeningState.CLOSED;
+        levelPlan[floorDescentionX, y].bottomState = OpeningState.OPEN;
+
+
+        int leftX = Math.Min(floorDescentionX, previousFloorDescentionX);
+        int rightX = Math.Max(floorDescentionX, previousFloorDescentionX);
+
+        // start and end horizontal openings
+        levelPlan[leftX, y].rightState = OpeningState.OPEN;
+        levelPlan[rightX, y].leftState = OpeningState.OPEN;
+
+        // in between openings
+        for (int x = leftX + 1; x < rightX; x++)
+        {
+            levelPlan[x, y].rightState = OpeningState.OPEN;
+            levelPlan[x, y].leftState = OpeningState.OPEN;
+        }
+
+    }
+
+
     // Generate room x index on floor other than startRoomX
     private int GenerateFloorDescention(int startRoomX)
     {
-        int roomXOffset = rng.Next(1, this.config.xDimension - 1);
+        int roomXOffset = rng.Next(1, this.config.xDimension);
         int endRoomX = (startRoomX + roomXOffset) % this.config.xDimension;
 
         return endRoomX;
