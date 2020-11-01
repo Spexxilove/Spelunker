@@ -7,11 +7,26 @@ using UnityEngine;
 
 namespace Assets.Scripts.Level_Generation
 {
+    public enum OpeningState
+    {
+        CLOSED,
+        OPEN,
+        ANY
+    }
+
     class RoomPlanData
     {
 
         public int xCoordinate;
         public int yCoordinate;
+
+        public bool isStart = false;
+        public bool isGoal = false;
+
+        public OpeningState topState = OpeningState.ANY;
+        public OpeningState bottomState = OpeningState.ANY;
+        public OpeningState leftState = OpeningState.ANY;
+        public OpeningState rightState = OpeningState.ANY;
 
         public GameObject roomPrefab;
 

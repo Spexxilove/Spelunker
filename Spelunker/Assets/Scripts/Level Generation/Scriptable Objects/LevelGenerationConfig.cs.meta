@@ -3,7 +3,20 @@ guid: 7b08e0c59ed3d3f4895a2b31e08a447b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - boundryTile: {fileID: 5313532348434933215, guid: 335a78b41619cfe4987cae6173a8b814, type: 3}
+  - leftRoomPool: {instanceID: 0}
+  - leftBottomRoomPool: {instanceID: 0}
+  - leftRightRoomPool: {instanceID: 0}
+  - leftRightBottomRoomPool: {instanceID: 0}
+  - leftTopRoomPool: {instanceID: 0}
+  - leftTopRightRoomPool: {instanceID: 0}
+  - rightRoomPool: {instanceID: 0}
+  - rightBottomRoomPool: {instanceID: 0}
+  - topRoomPool: {instanceID: 0}
+  - topRightRoomPool: {instanceID: 0}
+  - startRoom: {fileID: 1311551540606514413, guid: 96bf8b61ba65f2c49af115d0797488d0, type: 3}
+  - goalRoom: {fileID: 3572823874375633391, guid: 874f53d77d4d5af40836ab99309c428e, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

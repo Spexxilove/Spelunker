@@ -11,7 +11,7 @@ public class LevelGenerator : MonoBehaviour
     private IntVariable seed;
 
     [SerializeField]
-    private LevelGenerationConfig levelGenerationConfig;
+    private LevelGenerationConfig config;
 
     // just for testing
     public GameObject defaultRoomPrefab;
@@ -35,21 +35,80 @@ public class LevelGenerator : MonoBehaviour
 
     private void PlanLevelLayout()
     {
-        for (int x = 0; x < this.levelGenerationConfig.xDimension; x++)
+        for (int x = 0; x < this.config.xDimension; x++)
         {
-            for (int y = 0; y < this.levelGenerationConfig.yDimension; y++)
+            for (int y = 0; y < this.config.yDimension; y++)
             {
                 // for testing
                 this.levelPlan[x, y].roomPrefab = this.defaultRoomPrefab;
             }
         }
+
+
+        // get choose starting point
+        int startRoomX = rng.Next(0, this.config.xDimension);
+        RoomPlanData startRoom = levelPlan[startRoomX, this.config.yDimension - 1];
+        startRoom.roomPrefab = config.startRoom;
+
+        // get choose end point:
+        int goalRoomX = rng.Next(0, this.config.xDimension);
+        RoomPlanData goalRoom = levelPlan[goalRoomX, 0];
+        goalRoom.roomPrefab = config.goalRoom;
+
+        PlanPath(startRoomX, goalRoomX);
+    }
+
+    private void PlanPath(int startRoomX, int goalRoomX)
+    {
+        int previousFloorDescentionX = startRoomX;
+
+        // plan floors above bottom floor
+        for (int y = this.config.yDimension - 1; y > 0; y--)
+        {
+            //floor starting point has to be open at top and closed at bottom
+            levelPlan[previousFloorDescentionX, y].topState = OpeningState.OPEN;
+            levelPlan[previousFloorDescentionX, y].bottomState = OpeningState.CLOSED;
+
+            // current floor end generation
+            int floorDescentionX = GenerateFloorDescention(previousFloorDescentionX);
+
+            //floor end point has to be closed at top and open at bottom
+            levelPlan[floorDescentionX, y].topState = OpeningState.CLOSED;
+            levelPlan[floorDescentionX, y].bottomState = OpeningState.OPEN;
+
+            int leftX = Math.Min(floorDescentionX, previousFloorDescentionX);
+            int rightX = Math.Max(floorDescentionX, previousFloorDescentionX);
+
+            // start and end horizontal openings
+            levelPlan[leftX, y].rightState = OpeningState.OPEN;
+            levelPlan[rightX, y].leftState = OpeningState.OPEN;
+
+            // in between openings
+            for (int x = leftX+1; x < rightX; x++)
+            {
+                levelPlan[x, y].rightState = OpeningState.OPEN;
+                levelPlan[x, y].leftState = OpeningState.OPEN;
+            }
+            
+            previousFloorDescentionX = floorDescentionX;
+        }
+    }
+
+    
+    // Generate room x index on floor other than startRoomX
+    private int GenerateFloorDescention(int startRoomX)
+    {
+        int roomXOffset = rng.Next(1, this.config.xDimension - 1);
+        int endRoomX = (startRoomX + roomXOffset) % this.config.xDimension;
+
+        return endRoomX;
     }
 
     private void SpawnRooms()
     {
-        for (int x = 0; x < this.levelGenerationConfig.xDimension; x++)
+        for (int x = 0; x < this.config.xDimension; x++)
         {
-            for (int y = 0; y < this.levelGenerationConfig.yDimension; y++)
+            for (int y = 0; y < this.config.yDimension; y++)
             {
                 Vector3 position = GetRoomCoordinates(x, y);
                 Instantiate(this.levelPlan[x, y].roomPrefab, position, Quaternion.identity);
@@ -59,12 +118,12 @@ public class LevelGenerator : MonoBehaviour
 
     private void InitLevelPlan()
     {
-        this.levelPlan = new RoomPlanData[this.levelGenerationConfig.xDimension, this.levelGenerationConfig.yDimension];
+        this.levelPlan = new RoomPlanData[this.config.xDimension, this.config.yDimension];
         
         //fill initial level plan
-        for(int x =0; x < this.levelGenerationConfig.xDimension; x++)
+        for(int x =0; x < this.config.xDimension; x++)
         {
-            for (int y = 0; y < this.levelGenerationConfig.yDimension; y++)
+            for (int y = 0; y < this.config.yDimension; y++)
             {
                 this.levelPlan[x, y] = new RoomPlanData(x, y);
             }
@@ -78,32 +137,32 @@ public class LevelGenerator : MonoBehaviour
         Vector3 bottomLeftPosition = GetRoomCoordinates(0, 0);
 
         // get position bottom left outside of level bounds
-        float xOffset = (this.levelGenerationConfig.roomWidth / 2f + 0.5f) * this.levelGenerationConfig.tileSideLength;
-        float yOffset = (this.levelGenerationConfig.roomHeight / 2f + 0.5f) * this.levelGenerationConfig.tileSideLength;
+        float xOffset = (this.config.roomWidth / 2f + 0.5f) * this.config.tileSideLength;
+        float yOffset = (this.config.roomHeight / 2f + 0.5f) * this.config.tileSideLength;
 
         bottomLeftPosition.x -= xOffset;
         bottomLeftPosition.y -= yOffset;
 
-        int levelWidthInTiles = this.levelGenerationConfig.xDimension * this.levelGenerationConfig.roomWidth;
-        int levelHeightInTiles = this.levelGenerationConfig.yDimension * this.levelGenerationConfig.roomHeight;
+        int levelWidthInTiles = this.config.xDimension * this.config.roomWidth;
+        int levelHeightInTiles = this.config.yDimension * this.config.roomHeight;
 
 
-        Vector3 tileOffsetRight = Vector3.right * this.levelGenerationConfig.tileSideLength;
-        Vector3 tileOffsetUp = Vector3.up * this.levelGenerationConfig.tileSideLength;
+        Vector3 tileOffsetRight = Vector3.right * this.config.tileSideLength;
+        Vector3 tileOffsetUp = Vector3.up * this.config.tileSideLength;
 
         //spawn bottom border including corners
-        SpawnTileLine(bottomLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.levelGenerationConfig.boundryTile);
+        SpawnTileLine(bottomLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.config.boundryTile);
 
         //spawn left border without corners 
-        SpawnTileLine(bottomLeftPosition+ tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.levelGenerationConfig.boundryTile);
+        SpawnTileLine(bottomLeftPosition+ tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.config.boundryTile);
 
         //spawn top border with corners
         Vector3 topLeftPosition = bottomLeftPosition + tileOffsetUp * (levelHeightInTiles + 1);
-        SpawnTileLine(topLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.levelGenerationConfig.boundryTile);
+        SpawnTileLine(topLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.config.boundryTile);
 
         //spawn right border without corners 
         Vector3 bottomRightPosition = bottomLeftPosition + tileOffsetRight * (levelWidthInTiles + 1);
-        SpawnTileLine(bottomRightPosition + tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.levelGenerationConfig.boundryTile);
+        SpawnTileLine(bottomRightPosition + tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.config.boundryTile);
     }
 
     private void SpawnTileLine(Vector3 startingPosition, Vector3 tileOffset, int amount, GameObject tile)
@@ -135,8 +194,8 @@ public class LevelGenerator : MonoBehaviour
     private Vector3 GetRoomCoordinates(int x, int y)
     {
         // bottom left room spawns at 0, 0
-        float xCoord = x * this.levelGenerationConfig.roomWidth * this.levelGenerationConfig.tileSideLength;
-        float yCoord = y * this.levelGenerationConfig.roomHeight * this.levelGenerationConfig.tileSideLength;
+        float xCoord = x * this.config.roomWidth * this.config.tileSideLength;
+        float yCoord = y * this.config.roomHeight * this.config.tileSideLength;
 
         return new Vector3(xCoord, yCoord, 0);
     }
