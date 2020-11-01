@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewLevelGenerationConfig", menuName = "ScriptableObjects/LevvelGeneration/LevelGenerationConfig")]
+[CreateAssetMenu(fileName = "NewLevelGenerationConfig", menuName = "ScriptableObjects/LevelGeneration/LevelGenerationConfig")]
 public class LevelGenerationConfig : ScriptableObject
 {
     public GameObject boundryTile;
