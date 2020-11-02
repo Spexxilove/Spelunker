@@ -14,7 +14,7 @@ namespace Assets.Scripts.Level_Generation
         ANY
     }
 
-    class RoomPlanData
+    public class RoomPlanData
     {
 
         public int xCoordinate;
