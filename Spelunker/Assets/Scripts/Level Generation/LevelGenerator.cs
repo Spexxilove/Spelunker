@@ -162,32 +162,35 @@ public class LevelGenerator : MonoBehaviour
         int levelWidthInTiles = this.config.xDimension * this.config.roomWidth;
         int levelHeightInTiles = this.config.yDimension * this.config.roomHeight;
 
-
         Vector3 tileOffsetRight = Vector3.right * this.config.tileSideLength;
         Vector3 tileOffsetUp = Vector3.up * this.config.tileSideLength;
 
+        // parent object to group all the boundary tiles
+        GameObject boundsObject = new GameObject("LevelBounds");
+
         //spawn bottom border including corners
-        SpawnTileLine(bottomLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.config.boundryTile);
+        SpawnTileLine(bottomLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.config.boundryTile, boundsObject);
 
         //spawn left border without corners 
-        SpawnTileLine(bottomLeftPosition+ tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.config.boundryTile);
+        SpawnTileLine(bottomLeftPosition+ tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.config.boundryTile, boundsObject);
 
         //spawn top border with corners
         Vector3 topLeftPosition = bottomLeftPosition + tileOffsetUp * (levelHeightInTiles + 1);
-        SpawnTileLine(topLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.config.boundryTile);
+        SpawnTileLine(topLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.config.boundryTile, boundsObject);
 
         //spawn right border without corners 
         Vector3 bottomRightPosition = bottomLeftPosition + tileOffsetRight * (levelWidthInTiles + 1);
-        SpawnTileLine(bottomRightPosition + tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.config.boundryTile);
+        SpawnTileLine(bottomRightPosition + tileOffsetUp, tileOffsetUp, levelHeightInTiles, this.config.boundryTile, boundsObject);
     }
 
-    private void SpawnTileLine(Vector3 startingPosition, Vector3 tileOffset, int amount, GameObject tile)
+    private void SpawnTileLine(Vector3 startingPosition, Vector3 tileOffset, int amount, GameObject tile, GameObject parentObject)
     {
 
         for (int i = 0; i < amount; i++)
         {
             Vector3 position = startingPosition + tileOffset * i;
-            Instantiate(tile, position, Quaternion.identity);
+            Instantiate(tile, position, Quaternion.identity, parentObject.transform);
+            
         }
     }
 
