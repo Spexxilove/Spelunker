@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Contains Data used to spawn Room
+// Contains Data used to spawn Rooms with same openings
 [CreateAssetMenu(fileName = "NewRoomSpawnData", menuName = "ScriptableObjects/LevelGeneration/RoomSpawnData")]
 public class RoomSpawnData : ScriptableObject
 {
-    public GameObject RoomPrefab;
+    public GameObject[] RoomPrefabs;
 
     //openings settings. should only use OPEN and CLOSED here
     public OpeningState openingLeft = OpeningState.CLOSED;

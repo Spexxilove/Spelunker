@@ -13,19 +13,19 @@ public class RoomPool : ScriptableObject
     public GameObject GetRandomRoomWithOpenings(OpeningState left, OpeningState top, OpeningState right, OpeningState bottom, System.Random rng)
     {
         //TODO: Replace this list with different type
-        ArrayList potentialRoomData = new ArrayList();
+        ArrayList potentialRooms = new ArrayList();
 
         foreach(RoomSpawnData roomdata in roomSpawnData)
         {
             if(roomdata.IsCompatible(left, top, right, bottom))
             {
-                potentialRoomData.Add(roomdata);
+                potentialRooms.AddRange(roomdata.RoomPrefabs);
             }
 
         }
 
-        int randomIndex = rng.Next(0, potentialRoomData.Count);
-        return ((RoomSpawnData) potentialRoomData[randomIndex]).RoomPrefab;
+        int randomIndex = rng.Next(0, potentialRooms.Count);
+        return ((GameObject) potentialRooms[randomIndex]);
     }
 
     public GameObject GetRandomRoomWithOpenings(RoomPlanData roomPlanData, System.Random rng)
