@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*Very basic movement for player. still has a lot of issues especially for jumping, sometimes dropping inputs and clinging to walls*/
-public class playerMovementComponent : MonoBehaviour
+public class PlayerMovementComponent : MonoBehaviour
 {
     //Movement
     public float horizontalSpeed;
@@ -12,11 +12,11 @@ public class playerMovementComponent : MonoBehaviour
     void Update()
     {
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
+
         //Jumping
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
-            // vcheck if grounded
-            
+            // check if grounded
             if (System.Math.Abs(rigidbody.velocity.y) < 0.1)
             {
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);

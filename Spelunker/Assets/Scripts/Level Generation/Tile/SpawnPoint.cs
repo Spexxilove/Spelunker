@@ -9,7 +9,6 @@ public class SpawnPoint : MonoBehaviour
 
    public void SpawnRandomObject(int seed)
     {
-        
         Random.InitState(seed);
         int randomIndex = Random.Range(0, spawnableObjects.Length);
         

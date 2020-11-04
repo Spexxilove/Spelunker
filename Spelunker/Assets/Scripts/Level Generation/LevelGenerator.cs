@@ -13,25 +13,39 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private LevelGenerationConfig config;
 
-    // just for testing
-    public GameObject defaultRoomPrefab;
-    public GameObject plannedRoomPrefab;
-
     // using system random to have a seperate instance for safety
     private System.Random rng;
 
     // [0,0] is the bottom left room
     private RoomPlanData[,] levelPlan;
 
+    private GameObject levelParentObject;
 
     void Start()
     {
         InitRandomNumberGenerator();
+        SpawnNewLevel();
+    }
+
+    public void SpawnNewLevel()
+    {
+        EmptyLevel();
         InitLevelPlan();
         PlanLevelLayout();
         SpawnRooms();
         FillInFloorTiles();
         SpawnBounds();
+    }
+
+    private void EmptyLevel()
+    {
+        //Destroy current level
+        if(this.levelParentObject != null)
+        {
+            GameObject.Destroy(this.levelParentObject);
+        }
+
+        this.levelParentObject = new GameObject("Level");
     }
 
     private void PlanLevelLayout()
@@ -127,7 +141,7 @@ public class LevelGenerator : MonoBehaviour
             for (int y = 0; y < this.config.yDimension; y++)
             {
                 Vector3 position = GetRoomCoordinates(x, y);
-                Instantiate(this.levelPlan[x, y].roomPrefab, position, Quaternion.identity);
+                Instantiate(this.levelPlan[x, y].roomPrefab, position, Quaternion.identity, this.levelParentObject.transform);
             }
         }
     }
@@ -167,6 +181,7 @@ public class LevelGenerator : MonoBehaviour
 
         // parent object to group all the boundary tiles
         GameObject boundsObject = new GameObject("LevelBounds");
+        boundsObject.transform.SetParent(this.levelParentObject.transform);
 
         //spawn bottom border including corners
         SpawnTileLine(bottomLeftPosition, tileOffsetRight, levelWidthInTiles + 2, this.config.boundryTile, boundsObject);
