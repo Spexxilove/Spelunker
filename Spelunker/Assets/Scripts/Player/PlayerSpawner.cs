@@ -13,7 +13,7 @@ public class PlayerSpawner : MonoBehaviour
         SpawnPlayer();
     }
 
-    private void SpawnPlayer()
+    public void SpawnPlayer()
     {
         GameObject[] spawnedPlayers = GameObject.FindGameObjectsWithTag("Player");
         GameObject spawnedPlayer;
