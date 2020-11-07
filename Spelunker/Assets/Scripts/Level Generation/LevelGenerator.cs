@@ -10,6 +10,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private IntVariable seed;
 
+    [Tooltip("Configuration scriptable object for level generation")]
     [SerializeField]
     private LevelGenerationConfig config;
 

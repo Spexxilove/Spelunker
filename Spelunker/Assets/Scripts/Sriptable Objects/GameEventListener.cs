@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-
+// listens to game event and calls unity event if triggered
 public class GameEventListener : MonoBehaviour
 {
     [SerializeField]

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//spawns a random object in place of this spawnpoint
 public class SpawnPoint : MonoBehaviour
 {
+    [Tooltip("A random gameobject out of this selection will be spawned in the place of this spawnpoint")]
     [SerializeField]
     private GameObject[] spawnableObjects;
 

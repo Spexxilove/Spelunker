@@ -8,6 +8,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewRoomPool", menuName = "ScriptableObjects/LevelGeneration/RoomPool")]
 public class RoomPool : ScriptableObject
 {
+    [Tooltip("Collection of room spawn data")]
     public RoomSpawnData[] roomSpawnData;
 
     public GameObject GetRandomRoomWithOpenings(OpeningState left, OpeningState top, OpeningState right, OpeningState bottom, System.Random rng)

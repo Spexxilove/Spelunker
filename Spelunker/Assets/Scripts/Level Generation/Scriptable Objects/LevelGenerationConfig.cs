@@ -8,20 +8,22 @@ public class LevelGenerationConfig : ScriptableObject
 {
     public GameObject boundryTile;
 
-    // size of level in x direction (horizontal)
+    [Tooltip("size of level in x direction in rooms (horizontal)")] 
     public int xDimension = 5;
 
-    // size of level in y direction (vertical)
+    [Tooltip("size of level in y direction in rooms (vertical)")]
     public int yDimension = 5;
 
+    [Tooltip("Scripable object containing all room data for level generation")]
     public RoomPool GeneralRoomPool;
 
-    // start room prefab on top floor
+    [Tooltip("start room prefab on top floor")]
     public GameObject startRoom;
 
-    // goal room prefab on bottom floor
+    [Tooltip("goal room prefab on bottom floor")]
     public GameObject goalRoom;
 
+    // not exposed values --------------------------------
 
     // width and height of a tile in unity units
     public readonly float tileSideLength = 1;

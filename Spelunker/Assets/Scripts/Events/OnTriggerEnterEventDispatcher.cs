@@ -6,7 +6,8 @@ public class OnTriggerEnterEventDispatcher : MonoBehaviour
 {
     [SerializeField]
     private GameEvent TriggeredEvent;
-    
+
+    [Tooltip("Tag the other collider has to have to trigger this event. If none is set any object will trigger the event")]
     [SerializeField]
     private string colliderTag;
 
