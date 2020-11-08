@@ -11,12 +11,14 @@ Basic concept:
 
 Generation:
 
+The settings for the generation are combined in a scriptable object used as a config file.
+
  	- Initialize random number generation with seed
 	- Place Start room at a random position on the top floor
 	- Place goal room on the bottom floor
  	- Generate a random path from start to goal and plan for these room to require the openings to make the path possible
  	- Fill the grid with random rooms satisfiying the requirements. This puts random rooms 	outside of the required path.
-	- The settings for the generation are combined in a scriptable object used as a config file.
+	- Spawn rooms and fill in random tiles in rooms with spawn points.
 
 Rooms:
 
