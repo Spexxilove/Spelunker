@@ -17,7 +17,6 @@ namespace Assets.Scripts.Level_Generation
     // contains data for one room used when creating a plan for a level
     public class RoomPlanData
     {
-
         public int xCoordinate;
         public int yCoordinate;
 

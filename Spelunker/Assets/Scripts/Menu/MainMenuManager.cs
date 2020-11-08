@@ -7,9 +7,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviour
 {
     public IntVariable seedVariable;
-
     public string playSceneName;
-
     public TMP_InputField seedInputField;
 
     void Start()
@@ -31,12 +29,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void UpdateSeed(int seed)
     {
-        this.seedVariable.Value = seed;
+        this.seedVariable.value = seed;
         seedInputField.text = seed.ToString();
     }
 
 
-        public void StartGame()
+    public void StartGame()
     {
         SceneManager.LoadScene(playSceneName);
     }

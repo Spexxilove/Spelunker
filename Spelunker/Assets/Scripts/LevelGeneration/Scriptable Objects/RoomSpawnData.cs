@@ -20,7 +20,6 @@ public class RoomSpawnData : ScriptableObject
     [Tooltip("Has opening to the bottom (only use open or closed)")]
     public OpeningState openingBottom = OpeningState.CLOSED;
 
-
     internal bool IsCompatible(OpeningState leftCondition, OpeningState topCondition, OpeningState rightCondition, OpeningState bottomCondition)
     {
         // compatible if condition is ANY or equal to SpawnData
