@@ -20,6 +20,7 @@ public class LevelGenerator : MonoBehaviour
     // [0,0] is the bottom left room
     private RoomPlanData[,] levelPlan;
 
+    // game object to group the level under
     private GameObject levelParentObject;
 
     void Start()
@@ -47,6 +48,20 @@ public class LevelGenerator : MonoBehaviour
         }
 
         this.levelParentObject = new GameObject("Level");
+    }
+
+    private void InitLevelPlan()
+    {
+        this.levelPlan = new RoomPlanData[this.config.xDimension, this.config.yDimension];
+
+        //fill initial level plan
+        for (int x = 0; x < this.config.xDimension; x++)
+        {
+            for (int y = 0; y < this.config.yDimension; y++)
+            {
+                this.levelPlan[x, y] = new RoomPlanData(x, y);
+            }
+        }
     }
 
     private void PlanLevelLayout()
@@ -112,7 +127,6 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
-
     // Generate room x index on floor other than startRoomX
     private int GenerateFloorDescention(int startRoomX)
     {
@@ -123,44 +137,24 @@ public class LevelGenerator : MonoBehaviour
     }
 
     private void SpawnRooms()
-    {
-        //TODO: fix this mess
+    {     
         for (int x = 0; x < this.config.xDimension; x++)
         {
             for (int y = 0; y < this.config.yDimension; y++)
             {
+                // choose a room if it's not already set
                 if (this.levelPlan[x, y].roomPrefab == null)
                 {
-                    this.levelPlan[x, y].roomPrefab = this.config.GeneralRoomPool.GetRandomRoomWithOpenings(this.levelPlan[x, y], rng);
+                    this.levelPlan[x, y].roomPrefab = this.config.GeneralRoomPool.GetRandomRoomWithOpenings(this.levelPlan[x, y], rng);                  
                 }
-            }
-        }
 
-
-        for (int x = 0; x < this.config.xDimension; x++)
-        {
-            for (int y = 0; y < this.config.yDimension; y++)
-            {
+                // instantiatie room
                 Vector3 position = GetRoomCoordinates(x, y);
                 Instantiate(this.levelPlan[x, y].roomPrefab, position, Quaternion.identity, this.levelParentObject.transform);
             }
         }
     }
-
-    private void InitLevelPlan()
-    {
-        this.levelPlan = new RoomPlanData[this.config.xDimension, this.config.yDimension];
-        
-        //fill initial level plan
-        for(int x =0; x < this.config.xDimension; x++)
-        {
-            for (int y = 0; y < this.config.yDimension; y++)
-            {
-                this.levelPlan[x, y] = new RoomPlanData(x, y);
-            }
-        }
-    }
-
+ 
     //spawn level surrounding tiles
     private void SpawnBounds()
     {
@@ -212,7 +206,7 @@ public class LevelGenerator : MonoBehaviour
 
     private void InitRandomNumberGenerator()
     {
-        this.rng = new System.Random(this.seed.Value);
+        this.rng = new System.Random(this.seed.value);
     }
 
     private void FillInFloorTiles()

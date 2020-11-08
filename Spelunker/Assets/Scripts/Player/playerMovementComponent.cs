@@ -28,16 +28,13 @@ public class PlayerMovementComponent : MonoBehaviour
         //Left Right Movement
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            horizontalMoveVelocity = -horizontalSpeed;
+            horizontalMoveVelocity -= horizontalSpeed;
         }
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
-            horizontalMoveVelocity = horizontalSpeed;
+            horizontalMoveVelocity += horizontalSpeed;
         }
 
         rigidbody.velocity = new Vector2(horizontalMoveVelocity, rigidbody.velocity.y);
-
-    }
-   
-
+    } 
 }
